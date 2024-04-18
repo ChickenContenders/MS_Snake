@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
-using GameMicroServer.Services;
 
 namespace Micro
 {
@@ -15,9 +14,13 @@ namespace Micro
     [Route("[controller]")]
     public class MicroController : ControllerBase
     {
+        /// <summary>
+        /// This is an editted version of the original monolithic microservice to only contain the Snake object inside the array.
+        /// Instead of reconfiguring the architecture to instead only pass one object it is more efficient to keep the same structure and return a one item list since we are'nt worried about
+        /// peak performance at this moment.
+        /// </summary>
         private static readonly List<GameInfo> TheInfo = new List<GameInfo>
         {
-            //Remove this code once individual microservices are set up
             new GameInfo { 
                 Id = 1,
                 Title = "Snake",
@@ -36,24 +39,6 @@ namespace Micro
         {
             _logger = logger;
         }
-
-        private readonly IGameRepository _gameRepo;
-        //public MicroController(IGameRepository gameRepo)
-        //{
-        //    _gameRepo = gameRepo;
-        //}
-
-        //[HttpGet("game/{id}")]
-        //public IActionResult Get(int id)
-        //{
-        //    var game = _gameRepo.GetByIdAsync(id);
-        //    if (game == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(game);
-        //}
-        // This method will return the GameInfo object with the specified ID
 
         [HttpGet]
         public IEnumerable<GameInfo> Get()
